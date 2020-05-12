@@ -1,0 +1,11 @@
+<header class="masthead mb-auto">
+  <div class="inner">
+    <h3 class="masthead-brand">{{ product.category }}</h3>
+    <nav class="nav nav-masthead justify-content-center">
+      {% for author in product.author.all %}
+      <a class="nav-link active" href="{{ author.get_absolute_url }}">Об авторе</a>
+      {% endfor %}
+      <a class="nav-link" href="/">Вернуться на главную</a>
+    </nav>
+  </div>
+</header>

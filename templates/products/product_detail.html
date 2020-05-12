@@ -1,0 +1,97 @@
+{% extends 'products/base.html' %}
+{% load static %}
+{% block title %} {{ product.title }} {% endblock title %}
+{% block content %}
+<main role="main" class="inner cover">
+  <div><br></div>
+  <div class="bd-placeholder-img card-img-top">
+    <img src="{{ product.view.url }}" class="card-img" alt="">
+  </div>
+  <div><br></div>
+  <ul>
+    <li><span><b>Название:</b> {{ product.title }}</span></li>
+    <p>
+      {% for image in product.collection_set.all %}
+      <img src="{{ image.image.url }}" class="img-fluid" alt="{{ image.description|safe }}">
+      {% endfor %}
+    </p>
+    <li><span><b>Автор:</b>
+        {% for author in product.author.all %}
+          <a href="{{ author.get_absolute_url }}"> {{ author.name }} </a>
+        {% endfor %}
+      </span></li>
+    <li><span><b>Жанр:</b>
+        {% for genre in product.genres.all %}
+          {{ genre.name }}
+        {% endfor %}
+      </span></li>
+    <li><span><b>Дата создания:</b> {{ product.year }}</span></li>
+    <li><span><b>Описание:</b> {{ product.description|safe }}</span></li>
+  </ul>
+  <div class="row">
+    <div class="single-form-left">
+      <div class="contact-single">
+        <h2 class="editContent">
+          Оставить отзыв
+          <span class="sub-tittle editContent">
+            <h6>Всего отзывов: {{ product.reviews_set.count }}</h6>
+          </span>
+        </h2>
+        <form action="{% url 'new_review' product.id %}" method="post" class="mt-4" id="FormReviews">
+          {% csrf_token %}
+          <input type="hidden" name="parent" id="contactparent" value="">
+          <div class="form-group editContent">
+            <label for="contactcomment" class="editContent">
+              Ваш комментарий
+            </label>
+            <textarea class="form-control border" rows="5" name="text" id="contactcomment" required=""></textarea>
+          </div>
+          <div class="d-sm-flex">
+            <div class="col-sm-6 form-group p-0 editContent">
+              <label for="contactusername" class="editContent">
+                Ваше Имя
+              </label>
+              <input type="text" class="form-control border" name="name" id="contactusername" required="">
+            </div>
+            <div class="col-sm-6 form-group ml-sm-3 editContent">
+              <label for="contactemail" class="editContent">
+                Ваш email
+              </label>
+              <input type="email" class="form-control border" name="email" id="contactemail" required="">
+            </div>
+          </div>
+          <button type="submit" class="mt-3 btn btn-success btn-block py-3">Отправить</button>
+        </form>
+      </div>
+    </div>
+    {% for review in product.get_review %}
+    <div class="media py-5">
+      <img src="{% static 'image/dostoevskiy.jpg' %}" class="mr-3 img-fluid" alt="image">
+      <div class="media-body mt-4">
+        <h5 class="mt-0 editContent">{{ review.name }}</h5>
+        <p class="mt-2 editContent">{{ review.text }}</p>
+        <a href="#FormReviews" onclick="AddNewReview('{{ review.name }}', '{{ review.id }}')">Ответить</a>
+        {% for review_2 in review.reviews_set.all %}
+        <div class="media mt-5 editContent">
+          <a class="pr-3" href="#">
+            <img src="{% static 'image/tolstoy.jpg' %}" class="img-fluid " alt="image">
+          </a>
+          <div class="media-body">
+            <h5 class="mt-0 editContent">{{ review_2.name }}</h5>
+            <p class="mt-2 editContent">{{ review_2.text }}</p>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</main>
+<script>
+  function AddNewReview(name, id) {
+    document.getElementById("contactparent").value = id;
+    document.getElementById("contactcomment").innerText = `${name}, `;
+  }
+
+</script>
+{% endblock content %}

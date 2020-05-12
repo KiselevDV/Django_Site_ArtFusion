@@ -1,0 +1,17 @@
+{% extends 'products/base.html' %}
+{% load static %}
+{% block title %} {{ author.name }} {% endblock title %}
+{% block content %}
+<main role="main" class="inner cover">
+  <div><br></div>
+  <div class="bd-placeholder-img card-img-top">
+    <img src="{{ author.image.url }}" class="card-img" alt="">
+  </div>
+  <div><br></div>
+  <ul>
+    <li><span><b>Имя:</b> {{ author.name }}</span></li>
+    <li><span><b>Возраст:</b> {{ author.age }}</span></li>
+    <li><span><b>О авторе:</b> {{ author.description|safe }}</span></li>
+  </ul>
+</main>
+{% endblock content %}
